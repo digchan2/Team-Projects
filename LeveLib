@@ -1,0 +1,235 @@
+/*
+team - project#2 LeveLib
+Dev Version
+*/
+
+const ctx = com.mojang.minecraftpe.MainActivity.currentMainActivity.get();
+
+const CENTER = android.view.Gravity.CENTER;
+const LEFT = android.view.Gravity.LEFT;
+const RIGHT = android.view.Gravity.RIGHT;
+const TOP = android.view.Gravity.TOP;
+const BOTTOM = android.view.Gravity.BOTTOM;
+
+const BLACK = android.graphics.Color.BLACK;
+const BLUE = android.graphics.Color.BLUE;
+const CYAN = android.graphics.Color.CYAN;
+const DKGRAY = android.graphics.Color.DKGRAY;
+const GRAY = android.graphics.Color.GRAY;
+const GREEN = android.graphics.Color.GREEN;
+const LTGRAY = android.graphics.Color.LTGRAY;
+const MAGENTA= android.graphics.Color.MAGENTA;
+const RED = android.graphics.Color.RED;
+const TRANSPARENT = android.graphics.Color.TRANSPARENT;
+const WHITE = android.graphics.Color.WHITE;
+const YELLOW = android.graphics.Color.YELLOW;
+const SkyBlue = android.graphics.Color.argb(250,22,220,212)
+
+const W= ctx.getWindowManager().getDefaultDisplay().getWidth();
+const H= ctx.getWindowManager().getDefaultDisplay().getHeight();
+
+function dp(pixel)
+{
+return Math.ceil(pixel * ctx.getResources().getDisplayMetrics().density);
+}
+
+const LvLib = {
+	Button : function(Text,Back,call){
+		var button = new android.widget.Button(ctx);
+		button.setText(Text[0]);
+		button.setTextSize(Text[1])
+		button.setTextColor(Text[2]);
+		if(Back!=null){
+			button.setBackgroundDrawable(LvLib.Background(Back[0],Back[1],Back[2],Back[3]));
+		}
+		if(typeof(call[0]) == "function")
+			button.setOnClickListener(new android.view.View.OnClickListener({onClick: function(view) {
+				call(view);
+			}}));
+		if(typeof(call[1]) == "function")
+			button.setOnLongClickListener(new android.view.View.OnLongClickListener({onLongClick: function(view) {
+				call(view);
+			return true;
+			}}));
+		return button;
+	},
+	Text : function(TextI,Back){
+		var Text = new android.widget.TextView(ctx);
+		Text.setText(TextI[0]);
+		Text.setTextSize(TextI[1]);
+		Text.setTextColor(TextI[2]);
+		if(Back!=null){
+			Text.setBackgroundDrawable(LvLib.Background(Back[0],Back[1],Back[2],Back[3]));
+		}
+		return Text;
+	},
+	Line : function(Text,Back){
+		var Line=LvLib.Text(["",Text[0],BLACK],Back)
+		Line.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Text[1]));
+		return Line;
+	},
+	Image : function(path){
+		var IMG=new android.widget.ImageView(ctx);
+			if(new java.io.File(path).exists()){
+				var BBB=new android.graphics.BitmapFactory.decodeFile(path);
+				IMG.setScaleType(android.widget.ImageView.ScaleType.FIT_XY);
+				IMG.setImageBitmap(BBB);
+			}
+		return IMG;
+	},
+	Toggle : function(Text,Back){
+		var Tbutton = new android.widget.ToggleButton(ctx);
+		Tbutton.setTextOn(Text[0]);
+		Tbutton.setTextOff(Text[1]);
+		Tbutton.setTextSize(Text[2])
+		Tbutton.setTextColor(Text[3]);
+		if(Back!=null){
+			Tbutton.setBackgroundDrawable(LvLib.Background(Back[0],Back[1],Back[2],Back[3]));
+		}
+		return Tbutton;
+	},
+	ProgressBar : function(Max,Num,Back){
+		var PB = new android.widget.ProgressBar(ctx, null, android.R.attr.progressBarStyleHorizontal);
+		PB.setMax(Max);
+		PB.setProgress(Num);
+		if(Back!=null){
+			PB.setBackgroundDrawable(LvLib.Background(Back[0],Back[1],Back[2],Back[3]));
+		}
+		return PB;
+	},
+	SeekBar : function(Max,Num,Back){
+		var SeekBar = new android.widget.SeekBar(ctx);
+		SeekBar.setMax(Max);
+		SeekBar.setProgress(Num);
+		if(Back!=null){
+			SeekBar.setBackgroundDrawable(LvLib.Background(Back[0],Back[1],Back[2],Back[3]));
+		}
+		return SeekBar;
+	},
+	Switch : function(T,Tn,Tf,id,C,Back){
+	var switchA = new android.widget.Switch(ctx)
+		switchA.setText(T)
+		switchA.setTextColor(SkyBlue);
+		switchA.setTextOn(Tn)
+		switchA.setTextOff(Tf)
+		switchA.setId(id);
+		switchA.setChecked(C);
+		if(Back!=null){
+			switchA.setBackgroundDrawable(LvLib.Background(Back[0],Back[1],Back[2],Back[3]));
+		}
+	  return switchA;
+	},
+	CheckBox : function(T,id,Ck,Back){
+	var CB = new android.widget.CheckBox(ctx)
+		CB.setText(T)
+		CB.setTextColor(SkyBlue);
+		CB.setId(id);
+		CB.setChecked(Ck);
+		if(Back!=null){
+			CB.setBackgroundDrawable(LvLib.Background(Back[0],Back[1],Back[2],Back[3]));
+		}
+	  return CB;
+	},
+	Layout : function(O,S){
+		var L=new android.widget.LinearLayout(ctx);
+		L.setOrientation(O);
+		L.setPadding(S,S,S,S)
+		return L;
+	},
+	PopupWindow : function(L,OutSide,Size,Back){
+		var Window = new android.widget.PopupWindow(L,Size[0],Size[1], OutSide); 
+		Window.setBackgroundDrawable(LvLib.Background(Back[0],Back[1],Back[2],Back[3]));
+		Window.setOutsideTouchable(false);
+		Window.showAtLocation(ctx.getWindow().getDecorView(), android.view.Gravity.TOP | android.view.Gravity.RIGHT,Size[2],Size[3]);
+		return Window;
+	},
+Background : function(color, radius,stroke,Sclr) {
+	var gradientDrawable = new android.graphics.drawable.GradientDrawable();
+	gradientDrawable.setColor(color);
+	gradientDrawable.setCornerRadius(radius);
+		if(stroke)
+		gradientDrawable.setStroke(dp(1),Sclr)
+	return gradientDrawable;
+	}
+}
+
+function make(){
+ctx.runOnUiThread(new java.lang.Runnable({run: function(){
+try	{
+		
+var Lv=LvLib.Layout(1,dp(5))
+
+Text=LvLib.Text(["LeveLib - Team Level Project#2",15,BLACK], null)
+Lv.addView(Text)
+
+Line=LvLib.Line([5,SkyBlue],null)
+Lv.addView(Line)
+
+btn=LvLib.Button(["LeveL",15,YELLOW],[WHITE,10,true,YELLOW],[function(view){clientMessage("Onclick!"},null])
+Lv.addView(btn)
+
+Toggle=LvLib.Toggle(["On","Off",15,SkyBlue],[WHITE,10,true,SkyBlue])
+Lv.addView(Toggle)
+
+Pro=LvLib.ProgressBar(20,5,null)
+Lv.addView(Pro)
+
+Seek=LvLib.SeekBar(20,15,null)
+Lv.addView(Seek)
+
+Swit=LvLib.Switch("Switch!","on","off",0,true,null)
+Lv.addView(Swit)
+
+Lv.addView(LvLib.CheckBox("Checking!",1,true,null))
+
+var scr = new android.widget.ScrollView(ctx); 
+scr.addView(Lv);
+
+LvLib.PopupWindow(scr,true,[W/2,H,0,0],[WHITE,5,true,BLACK]);
+}catch(err){
+clientMessage(err);
+}
+}}));
+}
+
+function useItem(x,y,z,i,b){
+	if(i==267){
+		make();
+	}
+}
+
+/*
+
+-LeveLib
+
+BackGround = [BackgroundColor, radius, Stroke, StorkColor] or null;
+
+if radius = 0 -> Rect
+if radius > 0 -> RoundRect
+Stroke[테두리] = true or false
+
+LvLib.Button([Text, TextSize, TextColor], BackGround)
+
+LvLib.Toggle([OnText, OffText, TextSize, TextColor], BackGround)
+
+LvLib.Text([Text, TextSize, TextColor], BackGround)
+
+LvLib.Line([Size,Color],BackGround)
+
+LvLib.ProgressBar(MaxNumber, Number, BackGround)
+LvLib.SeekBar(MaxNumber, Number, BackGround)
+LvLib.Image(Path)
+LvLib.Switch()
+LvLib.CheckBox()
+LvLib.layout(Orient, Padding)
+LvLib.PopupWindow(layout, OutSideTouch, [Width, Height, X, Y], BackGround)
+
+=== Ex ===
+
+var btn = LvLib.Button(["Library",15,SkyBlue],[WHITE,5,true,BLACK])
+Layout.addView(btn)
+
+var text = LvLib.Text(["Mine Craft",15,BLACK],null)
+Layout.addView(text)
+
+*/
